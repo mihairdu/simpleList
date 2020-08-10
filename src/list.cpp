@@ -6,10 +6,10 @@ void List::print_menu(){
     cout << "1 - Print list.\n";
     cout << "2 - Add to list.\n";
     cout << "3 - Delete from list.\n";
-    cout << "4 - Exit programme.\n";
+    cout << "4 - Save list.\n";
+    cout << "5 - Exit programme.\n";
 
-    cout << "Enter your choice: ";
-    cout << "\n\n";
+    cout << "Enter your choice: "; 
     cin >> choice;
 
     switch (choice){
@@ -23,11 +23,14 @@ void List::print_menu(){
             delete_item();
             break;
         case 4:
-            cout << "Exiting...\n";
-            exit(0);
+            save_list();
+            break;
+        case 5:
+            return;
             break;
         default:
             cout << "Nothing to be done. Exiting...\n";
+            break;
     }
 }
 
@@ -59,7 +62,11 @@ void List::delete_item() {
         cin >> itbd;
         list.erase( list.begin()+itbd );
         cout << "The new list looks like:\n";
-        print_list();
+        cout << "*** Printing list ***\n";
+        for (uint li = 0; li < list.size(); li++){
+            cout << li << "*" << list[li] << "\n";
+        }
+        cout << "\n";
     }
     print_menu();
 }
@@ -70,5 +77,36 @@ void List::print_list(){
         cout << li << "*" << list[li] << "\n";
     }
     cout << "\n";
+    print_menu();
+}
+
+bool List::find_userList() {
+    bool userFound = false;
+    cout << "\n\n\n\n\n";
+    cout << "*** Welcome " << name << " ***\n";
+
+    for ( uint ui = 0; ui < mainList.size(); ui++ ){
+        cout << mainList[ui][0] << '\n';
+        if ( mainList[ui][0] == name ) {
+            cout << "User has been found: " << mainList[ui][0] << '\n';
+            list = mainList[ui];
+            currentUserIndex = ui;
+            userFound = true;
+            break;
+        }
+    }
+
+    if ( !userFound ) {
+        list.push_back(name);
+        mainList.push_back(list);
+        currentUserIndex = (int)mainList.size()-1;
+    }
+
+    return userFound;
+}
+
+void List::save_list() {
+    cout << "Saving the list...\n";
+    mainList[currentUserIndex] = list;
     print_menu();
 }
